@@ -3,6 +3,7 @@ package com.example.guess1to10
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.example.guess1to10.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,10 +20,12 @@ class MainActivity : AppCompatActivity() {
         secret = (1..10).random()
         num = binding.edNum.text.toString().toInt()
         if (num != secret) {
-            binding.tvResult.setText(String.format("Not this number.The number is $secret."))
+//            binding.tvResult.setText(String.format("Not this number.The number is $secret."))
+            Toast.makeText(this, "Not this number.The number is $secret.", Toast.LENGTH_LONG).show()
             println("$num/$secret")
         } else {
-            binding.tvResult.setText(String.format("Bingo! The number is $secret."))
+//            binding.tvResult.setText(String.format("Bingo! The number is $secret."))
+            Toast.makeText(this,"Bingo! The number is $secret.", Toast.LENGTH_LONG).show()
         }
     }
 }
