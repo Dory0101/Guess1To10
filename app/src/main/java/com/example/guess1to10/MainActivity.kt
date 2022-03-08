@@ -2,30 +2,43 @@ package com.example.guess1to10
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.guess1to10.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+    }
     private lateinit var binding: ActivityMainBinding
+    val game = NumberGame()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
-    var num = 0
-    var secret = 0
+    val message = when (state) {
+        NumberGame.State.BIGGER = "bigger"
+
+    }
+
     fun guess(view: View) {
-        secret = (1..10).random()
-        num = binding.edNum.text.toString().toInt()
-        if (num != secret) {
-//            binding.tvResult.setText(String.format("Not this number.The number is $secret."))
-            Toast.makeText(this, "Not this number.The number is $secret.", Toast.LENGTH_LONG).show()
-            println("$num/$secret")
-        } else {
-//            binding.tvResult.setText(String.format("Bingo! The number is $secret."))
-            Toast.makeText(this,"Bingo! The number is $secret.", Toast.LENGTH_LONG).show()
-        }
+        Log.d(TAG, "testing: ${game.counter}")
+        var num = binding.edNum.text.toString().toInt()
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.dialog_title))
+            .setMessage(game.guess(num))
+            .setPositiveButton(getString(R.string.ok)){ dialog, which->
+                if (game.end) {
+                    game.reset()
+                    binding.tvCounter.text = game.counter.toString()
+                }
+            }
+            .show()
+        binding.tvCounter.text = game.counter.toString()
+        Toast.makeText(this, "$num/${game.secret}", Toast.LENGTH_LONG).show()
     }
 }
